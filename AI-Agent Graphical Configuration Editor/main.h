@@ -172,7 +172,7 @@ struct main_buffer {
     // 组合框
     utils::mycombobox<fs::path> 外观;
     utils::mycombobox<std::string> 模型;
-    utils::mycombobox<std::string> 本地或服务器;
+    utils::mycombobox<std::string> 语言模型位置;
     utils::mycombobox<std::string> 回答模式;
     // 布尔
     utils::mycombobox<bool> 统筹控制智能家居;
@@ -183,7 +183,7 @@ struct main_buffer {
         AI人设{ start_x, start_y + 1 * 每个字符高几像素, width, height, L"AI人设", hwnd, 临时hmenu++ },
         // 字符串数组
         唤醒{ start_x, start_y + 2 * 每个字符高几像素, width, height, L"唤醒文本", hwnd, 临时hmenu++ },
-        检测声音{ start_x, start_y + 3 * 每个字符高几像素, width, height, L"声音文本", hwnd, 临时hmenu++ },
+        检测声音{ start_x, start_y + 3 * 每个字符高几像素, width, height, L"监听文本", hwnd, 临时hmenu++ },
         思考{ start_x, start_y + 4 * 每个字符高几像素, width, height, L"思考文本", hwnd, 临时hmenu++ },
         点击{ start_x, start_y + 5 * 每个字符高几像素, width, height, L"点击文本", hwnd, 临时hmenu++ },
         // 数字
@@ -194,18 +194,18 @@ struct main_buffer {
         录音阈值{ start_x, start_y + 8 * 每个字符高几像素, width, height, L"录音阈值", hwnd, 临时hmenu++, 
         WS_CHILD | WS_VISIBLE | WS_BORDER | ES_AUTOHSCROLL | ES_NUMBER },
         /*y重新计数*/
-        停止录音时间{ start_x * 2 + width * 1, start_y + 0 * 每个字符高几像素, width, height, L"停止录音时间", hwnd, 临时hmenu++, 
+        停止录音时间{ start_x * 2 + width * 1, start_y + 0 * 每个字符高几像素, width, height, L"等待停止录音时间", hwnd, 临时hmenu++, 
         WS_CHILD | WS_VISIBLE | WS_BORDER | ES_AUTOHSCROLL | ES_NUMBER },
         聊天增强{ start_x * 2 + width * 1, start_y + 1 * 每个字符高几像素, width, height, L"聊天增强概率", hwnd, 临时hmenu++, 
         WS_CHILD | WS_VISIBLE | WS_BORDER | ES_AUTOHSCROLL | ES_NUMBER },
-        主动聊天{ start_x * 2 + width * 1, start_y + 2 * 每个字符高几像素, width, height, L"主动聊天频率", hwnd, 临时hmenu++, 
+        主动聊天{ start_x * 2 + width * 1, start_y + 2 * 每个字符高几像素, width, height, L"主动聊天概率", hwnd, 临时hmenu++, 
         WS_CHILD | WS_VISIBLE | WS_BORDER | ES_AUTOHSCROLL | ES_NUMBER },
         // 组合框
         外观{ start_x * 2 + width * 1, start_y + 3 * 每个字符高几像素, width, height, L"角色外观", hwnd, 临时hmenu++,
         WS_CHILD | WS_VISIBLE | CBS_DROPDOWNLIST | CBS_SORT },
         模型{ start_x * 2 + width * 1, start_y + 4 * 每个字符高几像素, width, height, L"语言模型", hwnd, 临时hmenu++,
         WS_CHILD | WS_VISIBLE | CBS_DROPDOWNLIST | CBS_SORT },
-        本地或服务器{ start_x * 2 + width * 1, start_y + 5 * 每个字符高几像素, width, height, L"语音合成", hwnd, 临时hmenu++ },
+        语言模型位置{ start_x * 2 + width * 1, start_y + 5 * 每个字符高几像素, width, height, L"语言模型位置", hwnd, 临时hmenu++ },
         回答模式{ start_x * 2 + width * 1, start_y + 6 * 每个字符高几像素, width, height, L"回答模式", hwnd, 临时hmenu++ },
         // 布尔
         统筹控制智能家居{ start_x * 2 + width * 1, start_y + 7 * 每个字符高几像素, width, height, L"是否启用统筹控制智能家居", hwnd, 临时hmenu++ }
@@ -259,9 +259,9 @@ struct main_buffer {
         外观.set_font(font);
         模型.set_font(font);
 
-        本地或服务器.set_font(font);
-        本地或服务器.add(L"服务器", "server");
-        本地或服务器.add(L"本地", "local");
+        语言模型位置.set_font(font);
+        语言模型位置.add(L"服务器", "server");
+        语言模型位置.add(L"本地", "local");
 
         回答模式.set_font(font);
         回答模式.add(L"AI总是回答", "free");
@@ -295,7 +295,7 @@ struct main_buffer {
 
         config["control_mijia"] = 统筹控制智能家居.get();
         config["mods"] = 回答模式.get();
-        config["tts_location"] = 本地或服务器.get();
+        config["tts_location"] = 语言模型位置.get();
 
         if (!模型.empty())
         {
@@ -406,9 +406,9 @@ struct main_buffer {
             }
 
             if (config.at("tts_location").get<std::string>() == "server") {
-                本地或服务器.set(L"服务器");
+                语言模型位置.set(L"服务器");
             } else if (config.at("tts_location").get<std::string>() == "local") {
-                本地或服务器.set(L"本地");
+                语言模型位置.set(L"本地");
             }
 
             if (!模型.empty())
